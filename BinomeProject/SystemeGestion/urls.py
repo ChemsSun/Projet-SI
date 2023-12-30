@@ -6,6 +6,6 @@ urlpatterns=[
     path('',views.home),
     path('achat/',views.achat),
     path('fournisseur/',views.fournisseur),
-    path('listeAchat/',views.liste_achats),
-    path('listeFournisseurs/',views.liste_fournisseurs),
+    path('listeAchat/',views.liste_achats,name='liste_achats'),
+    path('listeFournisseurs/',views.liste_fournisseurs,name='liste_fournisseurs'),
 ]

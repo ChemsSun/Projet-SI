@@ -1,5 +1,5 @@
 from django import forms
-from .models import Achat, Fournisseur
+from .models import Achat, Fournisseur,Produit
 
 class AchatForm(forms.ModelForm):
     class Meta:
@@ -9,4 +9,4 @@ class AchatForm(forms.ModelForm):
 class FournisseurForm(forms.ModelForm):
     class Meta:
         model = Fournisseur
-        fields = ['nom', 'adresse', 'email']    
+        fields = ['NomF', 'adresse', 'email']    

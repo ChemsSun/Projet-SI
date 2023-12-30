@@ -2,20 +2,20 @@ from django.db import models
 
 class Fournisseur(models.Model):
     ID_Fourni= models.AutoField(primary_key=True)
-    nom = models.CharField(max_length=200)
+    NomF = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
     email = models.EmailField()
 
     def __str__(self):
-        return self.nom
+        return self.NomF
     
 
 class Produit(models.Model):
     Code=models.AutoField(primary_key=True)
-    Nom=models.CharField(max_length=30)
+    NomP=models.CharField(max_length=30)
     Description=models.CharField(max_length=100)
     def __str__(self):
-        return self.nom
+        return self.NomP
     
 
 class Achat(models.Model):
