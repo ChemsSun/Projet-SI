@@ -1,4 +1,4 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import get_object_or_404, render ,redirect
 from django.shortcuts import render
 
 from SystemeGestion.models import Achat, Fournisseur, Produit
@@ -18,7 +18,6 @@ def achat(request):
             montant_total_achat=quantite * prix_unitaire
  
             fournisseur, created=Fournisseur.objects.get_or_create(NomF=fournisseur_nom)
-            produit , created=Produit.objects.get_or_create(NomP=produit_nom)
             achat=Achat.objects.create(
                 fournisseur=fournisseur,
                 produit=form.cleaned_data['produit'],
@@ -52,3 +51,11 @@ def liste_achats(request):
 def liste_fournisseurs(request):
     fournisseurs = Fournisseur.objects.all()
     return render(request, 'liste_fournisseurs.html', {'fournisseurs': fournisseurs})
+
+def delete_fournisseur(request,fournisseur_id):
+    fournisseur=get_object_or_404(Fournisseur,pk=fournisseur_id)
+
+    if request.method=='POST':
+        fournisseur.delete()
+        return redirect('liste_fournisseurs')
+    return render(request,'delete_fournisseur.html',{'fournisseur':fournisseur})

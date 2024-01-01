@@ -7,12 +7,30 @@
   </head>
   <body>
     <h2>Liste des achats</h2>
-    <ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Fournisseur</th>
+          <th>Quantite</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for achat in achats %}
+        <tr>
+          <td>{{achat.produit}}</td>
+          <td>{{achat.fournisseur}}</td>
+          <td>{{achat.quantite}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- <ul>
       {% for achat in achats %}
       <li>
         {{ achat.produit }} - {{ achat.fournisseur }} - {{ achat.quantite }}
       </li>
-      {% endfor %}
+      {% endfor %} -->
     </ul>
   </body>
 </html>

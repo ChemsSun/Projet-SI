@@ -7,12 +7,38 @@
   </head>
   <body>
     <h2>Liste des fournisseurs</h2>
-    <ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Adress</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% csrf_token %}
+        {% for fournisseur in fournisseurs %}
+        <tr>
+          <td>{{fournisseur.NomF}}</td>
+          <td>{{fournisseur.adresse}}</td>
+          <td>{{fournisseur.email}}</td>
+          <td>
+            <form method="post" action="{% url 'delete_fournisseur' fournisseur.ID_Fourni %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- <ul>
       {% for fournisseur in fournisseurs %}
       <li>
         {{ fournisseur.NomF }} - {{ fournisseur.adresse }} - {{ fournisseur.email}}
       </li>
       {% endfor %}
-    </ul>
+    </ul> -->
   </body>
 </html>
