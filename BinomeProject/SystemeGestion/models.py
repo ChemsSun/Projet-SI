@@ -14,6 +14,7 @@ class Produit(models.Model):
     Code=models.AutoField(primary_key=True)
     NomP=models.CharField(max_length=30)
     Description=models.CharField(max_length=100)
+    prix_achat=models.DecimalField(max_digits=10, decimal_places=2)
     def __str__(self):
         return self.NomP
     
@@ -29,6 +30,9 @@ class Achat(models.Model):
 
     def __str__(self):
         return self.produit
+    def save(self, *args, **kwargs):
+        self.montant_total_achat_ht = self.quantite * self.prix_unitaire_ht
+        super().save(*args, **kwargs)
 
 
 class Client(models.Model):

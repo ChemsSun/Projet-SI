@@ -6,13 +6,17 @@
     <title>Document</title>
   </head>
   <body>
+    {% if achats %}
     <h2>Liste des achats</h2>
-    <table>
+    <table border="1px">
       <thead>
         <tr>
           <th>Produit</th>
           <th>Fournisseur</th>
+          <th>Date</th>
           <th>Quantite</th>
+          <th>Montant total</th>
+          <th>Montant paye</th>
         </tr>
       </thead>
       <tbody>
@@ -20,17 +24,23 @@
         <tr>
           <td>{{achat.produit}}</td>
           <td>{{achat.fournisseur}}</td>
+          <td>{{achat.date_achat}}</td>
           <td>{{achat.quantite}}</td>
+          <td>{{achat.montant_total_achat_ht}}</td>
+          <td>{{achat.montant_paye}}</td>
+          <td>
+            <form method="post" action="{% url 'delete_achat' achat.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <!-- <ul>
-      {% for achat in achats %}
-      <li>
-        {{ achat.produit }} - {{ achat.fournisseur }} - {{ achat.quantite }}
-      </li>
-      {% endfor %} -->
+    {% else %}
+    <h1>aucune achat n'est effectué</h1>
+    {% endif%}
     </ul>
   </body>
 </html>
