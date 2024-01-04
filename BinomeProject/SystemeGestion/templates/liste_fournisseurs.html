@@ -13,7 +13,7 @@
           <th>Nom</th>
           <th>Adress</th>
           <th>Email</th>
-          <th>Action</th>
+          <th>solde</th>
         </tr>
       </thead>
       <tbody>
@@ -23,6 +23,7 @@
           <td>{{fournisseur.NomF}}</td>
           <td>{{fournisseur.adresse}}</td>
           <td>{{fournisseur.email}}</td>
+          <td>{{fournisseur.solde}}</td>
           <td>
             <form method="post" action="{% url 'delete_fournisseur' fournisseur.ID_Fourni %}">
               {% csrf_token %}
@@ -33,12 +34,5 @@
         {% endfor %}
       </tbody>
     </table>
-    <!-- <ul>
-      {% for fournisseur in fournisseurs %}
-      <li>
-        {{ fournisseur.NomF }} - {{ fournisseur.adresse }} - {{ fournisseur.email}}
-      </li>
-      {% endfor %}
-    </ul> -->
   </body>
 </html>

@@ -17,6 +17,7 @@
           <th>Quantite</th>
           <th>Montant total</th>
           <th>Montant paye</th>
+          <th>Montant restant</th>
         </tr>
       </thead>
       <tbody>
@@ -28,6 +29,13 @@
           <td>{{achat.quantite}}</td>
           <td>{{achat.montant_total_achat_ht}}</td>
           <td>{{achat.montant_paye}}</td>
+          <td>{{achat.montant_reste}}</td>
+          <td>
+            <form method="post" action="{% url 'reg' achat.fournisseur.ID_Fourni %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Règlement</button>
+            </form>
+          </td>
           <td>
             <form method="post" action="{% url 'delete_achat' achat.id %}">
               {% csrf_token %}

@@ -13,5 +13,8 @@ urlpatterns=[
     path('produits/',views.produits,name='produits'),
     path('delete_Produit/<int:produit_id>/',views.delete_Produit,name='delete_Produit'),
     path('delete_achat/<int:achat_id>/', views.delete_achat, name='delete_achat'),
-
+    path('paiement/<int:fournisseur_id>/',views.reg, name='reg'),
+    path('saisir_montant/<int:achat_id>/', views.saisir_montant, name='saisir_montant'),
+    path('transfert/',views.creer_transfert),
+    path('listeTransfert/',views.fiche_transferts,name='fiche_transferts'),
 ]
