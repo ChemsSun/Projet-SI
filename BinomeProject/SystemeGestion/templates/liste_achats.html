@@ -31,12 +31,6 @@
           <td>{{achat.montant_paye}}</td>
           <td>{{achat.montant_reste}}</td>
           <td>
-            <form method="post" action="{% url 'reg' achat.fournisseur.ID_Fourni %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success">Règlement</button>
-            </form>
-          </td>
-          <td>
             <form method="post" action="{% url 'delete_achat' achat.id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger">Supprimer</button>

@@ -17,4 +17,6 @@ urlpatterns=[
     path('saisir_montant/<int:achat_id>/', views.saisir_montant, name='saisir_montant'),
     path('transfert/',views.creer_transfert),
     path('listeTransfert/',views.fiche_transferts,name='fiche_transferts'),
+    path('listeReglements/', views.liste_reglement,name='liste_reglement'),
+    path('delete_reglement/<int:reglement_id>/',views.delete_reglement, name='delete_reglement'),
 ]

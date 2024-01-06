@@ -14,7 +14,7 @@ class FournisseurForm(forms.ModelForm):
 class ProduitForm(forms.ModelForm):
     class Meta:
         model=Produit
-        fields = ['NomP','Description','prix_achat']
+        fields = ['NomP','Description']
     
 class MontantForm(forms.ModelForm):
     class Meta:

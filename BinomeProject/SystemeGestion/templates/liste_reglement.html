@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Liste de reglement</h2>
+    <table border="1px">
+      <thead>
+        <tr>
+          <th>Fournisseur</th>
+          <th>Date</th>
+          <th>Montant de verssement</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% csrf_token %}
+        {% for reglement in reglements %}
+        <tr>
+          <td>{{reglement.fournisseur}}</td>
+          <td>{{reglement.date_reglement}}</td>
+          <td>{{reglement.montant_versement}}</td>
+          <td>
+            <form method="post" action="{% url 'delete_reglement' reglement.ID %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</body>
+</html>

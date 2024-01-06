@@ -15,7 +15,6 @@ class Produit(models.Model):
     Code=models.AutoField(primary_key=True)
     NomP=models.CharField(max_length=30)
     Description=models.CharField(max_length=100)
-    prix_achat=models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.NomP
@@ -46,7 +45,7 @@ class Client(models.Model):
 
 class Reglement_Fournisseur(models.Model):
     ID=models.AutoField(primary_key=True)
-    achat=models.ForeignKey(Achat,on_delete=models.CASCADE)
+    # achat=models.ForeignKey(Achat,on_delete=models.CASCADE)
     fournisseur=models.ForeignKey(Fournisseur,on_delete=models.CASCADE)
     date_reglement=models.DateField()
     montant_versement=models.DecimalField(max_digits=10,decimal_places=2)

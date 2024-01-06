@@ -25,6 +25,12 @@
           <td>{{fournisseur.email}}</td>
           <td>{{fournisseur.solde}}</td>
           <td>
+            <form method="post" action="{% url 'reg' fournisseur.ID_Fourni %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Règlement</button>
+            </form>
+          </td>
+          <td>
             <form method="post" action="{% url 'delete_fournisseur' fournisseur.ID_Fourni %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger">Supprimer</button>
