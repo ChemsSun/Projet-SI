@@ -1,19 +1,19 @@
 from django import forms
-from .models import Achat, Fournisseur,Produit, Reglement_Fournisseur, Transfert
+from .models import*
 
 class AchatForm(forms.ModelForm):
     class Meta:
         model = Achat
-        fields = ['fournisseur', 'produit', 'quantite', 'prix_unitaire_ht', 'date_achat']
+        fields = ['fournisseur', 'matierePremiere', 'quantite', 'prix_unitaire_ht', 'date_achat']
 
 class FournisseurForm(forms.ModelForm):
     class Meta:
         model = Fournisseur
         fields = ['NomF', 'adresse', 'email']    
 
-class ProduitForm(forms.ModelForm):
+class MatierePremiereForm(forms.ModelForm):
     class Meta:
-        model=Produit
+        model=MatierePremiere
         fields = ['NomP','Description']
     
 class MontantForm(forms.ModelForm):
@@ -25,8 +25,17 @@ class Reglement(forms.ModelForm):
     class Meta:
         model=Reglement_Fournisseur
         fields=['fournisseur','date_reglement','montant_versement']
-
+        error_messages = {
+            'fournisseur': {'required': ''},
+            'date_reglement':{'required':''},
+            'montant_versement':{'required':''}
+        }
 class TransfertForm(forms.ModelForm):
     class Meta:
         model = Transfert
-        fields = ['date_transfert', 'centre', 'produit', 'quantite']
+        fields = ['date_transfert', 'centre', 'matierePremiere', 'quantite']
+
+class CentreForm(forms.ModelForm):
+    class Meta:
+        model = Centre
+        fields = ['designation']

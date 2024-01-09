@@ -29,7 +29,7 @@
           <td>{{achat.quantite}}</td>
           <td>{{achat.montant_total_achat_ht}}</td>
           <td>{{achat.montant_paye}}</td>
-          <td>{{achat.montant_reste}}</td>
+          <td>{{ achat.montant_reste }}</td>
           <td>
             <form method="post" action="{% url 'delete_achat' achat.id %}">
               {% csrf_token %}

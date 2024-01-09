@@ -2,9 +2,8 @@ from decimal import Decimal
 from django.shortcuts import get_object_or_404, render ,redirect
 from django.shortcuts import render
 from django.db.models import Sum
-from SystemeGestion.models import Achat, Fournisseur, Produit, Reglement_Fournisseur
-from .forms import AchatForm, FournisseurForm, MontantForm, ProduitForm, Reglement, TransfertForm
-from .import forms
+from SystemeGestion.models import*
+from .forms import*
 def home(request):
     return render(request,'home.html')
 
@@ -44,8 +43,6 @@ def achat(request):
         if form.is_valid():
             achat = form.save(commit=False)
             achat.montant_total_achat_ht = achat.quantite * achat.prix_unitaire_ht
-            achat.produit.prix_achat=achat.prix_unitaire_ht
-            achat.produit.save()
             achat.save()
             return redirect('saisir_montant', achat_id=achat.id)
     else:
@@ -83,12 +80,16 @@ def reg(request,fournisseur_id):
     if request.method=='POST':
         form = Reglement(request.POST)
         if form.is_valid():
-             montant_verser=form.cleaned_data['montant_versement']
-             if montant_verser < fournisseur.solde:
-               fournisseur.solde -=montant_verser
-               fournisseur.save()
-               form.save()
-               return redirect('liste_fournisseurs')
+            montant_verser = form.cleaned_data['montant_versement']
+            if montant_verser <= fournisseur.solde:
+                fournisseur.solde -= montant_verser
+                fournisseur.save()
+                #modifier le règlement avant de l'enregistrer dans la base de données.
+                reglement = form.save(commit=False)
+                reglement.fournisseur = fournisseur
+                reglement.save()
+
+                return redirect('liste_fournisseurs')
     else:
         form = Reglement()
     return render(request, 'paiement.html', {'form': form})
@@ -106,18 +107,18 @@ def delete_reglement(request,reglement_id):
     return render(request,'delete_reglement.html',{'reglement':reglement})
 
 
-def produits(request):
+def matierepremiere(request):
     if request.method=='POST':
-        form=ProduitForm(request.POST)
+        form=MatierePremiereForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('list_produit')
+            return redirect('list_matierepremiere')
     else:   
-        form=ProduitForm()
+        form=MatierePremiereForm()
     return render(request,'produit.html',{'form':form})
 
-def list_produit(request):
-    produits=Produit.objects.all()
+def list_matierepremiere(request):
+    produits=MatierePremiere.objects.all()
     return render(request,'liste_produits.html',{'produits':produits})
 
 def liste_achats(request):
@@ -136,12 +137,12 @@ def delete_fournisseur(request,fournisseur_id):
         return redirect('liste_fournisseurs')
     return render(request,'delete_fournisseur.html',{'fournisseur':fournisseur})
 
-def delete_Produit(request,produit_id):
-    produit=get_object_or_404(Produit,pk=produit_id)
+def delete_matierepremiere(request,produit_id):
+    produit=get_object_or_404(MatierePremiere,pk=produit_id)
 
     if request.method=='POST':
         produit.delete()
-        return redirect('liste_produits')
+        return redirect('liste_matierepremiere')
     return render(request,'delete_Produit.html',{'produit':produit})
 
 def delete_achat(request,achat_id):
@@ -156,27 +157,16 @@ def creer_transfert(request):
         form = TransfertForm(request.POST)
         if form.is_valid():
             transfert = form.save(commit=False)
-            transfert.cout_transfert = transfert.produit.p * transfert.quantite
+            transfert.cout_transfert_equivalent = transfert.quantite
             transfert.save()
-            return redirect('fichetransferts')
+            return redirect('fiche_transferts')
     else:
         form = TransfertForm()
     return render(request, 'transfert.html', {'form': form})
 
 def fiche_transferts(request):
-    transferts = TransfertForm.objects.all()
+    transferts = Transfert.objects.all()
     return render(request, 'fiche_transfert.html', {'transferts': transferts})
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -7,13 +7,12 @@
 </head>
 <body>
     <h1>liste des produits dans le magasin</h1>
-    <a href="{% url 'produits' %}">Ajouter produit</a>
+    <a href="{% url 'matierepremiere' %}">Ajouter produit</a>
     <table border="1px">
         <thead>
           <tr>
             <th>Nom du produit</th>
             <th>Discription</th>
-            <th>Prix d'achat</th>
           </tr>
         </thead>
         <tbody>
@@ -21,9 +20,8 @@
           <tr>
             <td>{{produit.NomP}}</td>
             <td>{{produit.Description}}</td>
-            <td>{{produit.prix_achat}}</td>
             <td>
-              <form method="post" action="{% url 'delete_Produit' produit.Code %}">
+              <form method="post" action="{% url 'delete_matierepremiere' produit.Code %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Supprimer</button>
               </form>

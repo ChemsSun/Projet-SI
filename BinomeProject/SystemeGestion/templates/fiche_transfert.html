@@ -17,13 +17,14 @@
             </tr>
         </thead>
         <tbody>
-            {% for transfert to transferts %}
+            {% for transfert in transferts %}
             <tr>
-                <td>{{transfert.date}}</td>
+                <td>{{transfert.date_transfert}}</td>
                 <td>{{transfert.centre}}</td>
-                <td>{{transfert.produit}}</td>
+                <td>{{transfert.matierePremiere}}</td>
                 <td>{{transfert.quantite}}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </body>
