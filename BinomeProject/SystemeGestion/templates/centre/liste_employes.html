@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if employes %}
+    <h1>voici les employes du {{ employes.0.centre.designation }}</h1>
+    <a href="{% url 'employes' centre_id=centre_id %}">Ajouter un employé</a>
+    <table border="1px">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Email</th>
+                <th>Num Tlf</th>
+                <th>Salaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employe in employes %}
+            <tr>
+                <td>{{ employe.NomE }}</td>
+                <td>{{ employe.AdrE }}</td>
+                <td>{{ employe.Email }}</td>
+                <td>{{ employe.Tlf }}</td>
+                <td>{{ employe.Salaire }}</td>
+                <td>
+                    <form method="post" action="{% url 'paiment_journalier' employe_id=employe.CodeE %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Ajouter info</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'delete_emloyes' employe_id=employe.CodeE %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h1>Aucun employe inseret</h1>
+    <a href="{% url 'employes' centre_id=centre_id %}">Ajouter un employé</a>
+    {% endif%}
+</body>
+</html>

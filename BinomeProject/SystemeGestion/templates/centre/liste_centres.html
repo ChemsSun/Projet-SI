@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+          {%for centre in centres %}
+              <button><a href="{% url 'details_centre' centre.Code %}" class="btn btn-primary">{{centre.designation}}</a></button>
+          {% endfor %}
+</body>
+</html>

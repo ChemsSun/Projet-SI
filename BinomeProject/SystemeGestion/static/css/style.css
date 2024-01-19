@@ -1,4 +1,4 @@
-form {
+/* form {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
@@ -35,3 +35,36 @@ button:hover {
 .h{
     color: #45a049;
 }
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #4caf50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+ */

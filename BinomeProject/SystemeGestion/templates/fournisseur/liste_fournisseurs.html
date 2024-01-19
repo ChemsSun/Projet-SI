@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% if fournisseurs %}
+    <h2>Liste des fournisseurs</h2>
+    <a href="{% url 'fournisseur'%}"><button>Ajouter nouveau fournisseur</button></a>
+    <table border="1px">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Adress</th>
+          <th>Email</th>
+          <th>solde</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% csrf_token %}
+        {% for fournisseur in fournisseurs %}
+        <tr>
+          <td>{{fournisseur.NomF}}</td>
+          <td>{{fournisseur.adresse}}</td>
+          <td>{{fournisseur.email}}</td>
+          <td>{{fournisseur.solde}}</td>
+          <td>
+            {% if fournisseur.solde != 0 %}
+            <form method="post" action="{% url 'reg' fournisseur.ID_Fourni %}">
+              {% csrf_token %}              
+              <button type="submit" class="btn btn-success">Règlement</button>
+            </form>
+            {% endif %}
+          </td>
+          <td>
+            <form method="post" action="{% url 'delete_fournisseur' fournisseur.ID_Fourni %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+          </td>
+          <td>
+            <form method="post" action="{% url 'modifier_fournisseur' fournisseur.ID_Fourni %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Modifier</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h1>Aucun fournisseur</h1>
+    <a href="{% url 'fournisseur'%}"><button>Ajouter nouveau fournisseur</button></a>
+    {% endif%}
+    <a href="{% url 'home'%}"><button>Retourner à l'accueil</button></a>
+</body>
+
+</html>

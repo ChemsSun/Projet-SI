@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>liste des produits dans le magasin</h1>
+    <a href="{% url 'matierepremiere' %}"><button>Ajouter produit</button></a>
+    <table border="1px">
+        <thead>
+          <tr>
+            <th>Nom du produit</th>
+            <th>Discription</th>
+            <th>Quantite</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for produit in produits %}
+          <tr>
+            <td>{{produit.NomP}}</td>
+            <td>{{produit.Description}}</td>
+            <td>{{produit.Qte}}</td>
+            <td>
+              <form method="post" action="{% url 'modifier_matierepremiere' produit.Code %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Modifier</button>
+              </form>
+            </td>
+            <td>
+              <form method="post" action="{% url 'delete_matierepremiere' produit.Code %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{% url 'home' %}"><button>Retourner à l'accueil</button></a>
+</body>
+</html>

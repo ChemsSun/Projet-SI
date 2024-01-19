@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if transferts %}
+    <h1>Les transferts effectuer sont</h1>
+    <a href="{% url 'creer_transfert' %}">Ajouter un transfert</a>  
+    <table border="1px">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>centre</th>
+                <th>produit</th>
+                <th>Quentite</th>
+                <th>Cout de transfert</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transfert in transferts %}
+            <tr>
+                <td>{{transfert.date_transfert}}</td>
+                <td>{{transfert.centre}}</td>
+                <td>{{transfert.matierePremiere}}</td>
+                <td>{{transfert.quantite}}</td>
+                <td>{{transfert.cout_transfert}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {%else%}
+    <h1>Aucun transfert</h1>
+    <a href="{% url 'creer_transfert' %}">Ajouter un transfert</a>  
+    {% endif%}
+    <h1>total de transferts {{transfert.total}}</h1>
+    <a href="{% url 'home' %}"><button>Retourner à l'accueil</button></a>
+</body>
+</html>

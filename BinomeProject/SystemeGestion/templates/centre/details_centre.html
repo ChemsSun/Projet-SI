@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>hello {{ centre.designation }}</h1>
+    <a href="{% url 'list_employes' centre_id=centre.Code %}">liste employe</a>
+    <a href="{% url 'fichier_transfert_centres' centre_id=centre.Code %}">liste des transfert</a>
+</body>
+</html> 

@@ -4,12 +4,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
     <title>Document</title>
   </head>
   <body>
     <div class="h">
       <h1>hellloooo</h1>
+      <a href="{% url 'liste_achats' %}"><button>Vos achats</button></a>
+        <a href="{% url 'liste_fournisseurs' %}"><button>fournisseur disponible</button></a>
+        <a href="{% url 'liste_centres' %}"><button>Liste de vos centres</button></a>
+      <a href="{% url 'fiche_transferts' %}"><button>Vos transfert</button></a>
+      <a href="{% url 'list_matierepremiere' %}"><button>stock</button></a>
     </div>
   </body>
 </html>

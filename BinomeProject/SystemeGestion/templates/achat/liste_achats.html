@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style1.css' %}">
+    <title>Document</title>
+  </head>
+  <body>
+    {% if achats %}
+    <h2>Liste des achats</h2>
+    <div class="fillter"></div>
+    <form method="get" action="{% url 'liste_achats' %}">
+      {{ myfilter.form.as_p }}
+      <button type="submit">Rechercher</button>
+   </form>
+   <a href="{% url 'achat'%}"><button>Ajouter un achat</button></a>
+    <table border="1px">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Fournisseur</th>
+          <th>Date</th>
+          <th>Quantite</th>
+          <th>Montant total</th>
+          <th>Montant paye</th>
+          <th>Montant rester</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for achat in achats %}
+        <tr>
+          <td>{{achat.matierePremiere}}</td>
+          <td>{{achat.fournisseur}}</td>
+          <td>{{achat.date_achat}}</td>
+          <td>{{achat.quantite}}</td>
+          <td>{{achat.montant_total_achat_ht}}</td>
+          <td>{{achat.montant_paye}}</td>
+          <td>{{achat.montant_reste}}</td>
+          <td>
+            <form method="post" action="{% url 'delete_achat' achat.CodeAchat %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+          </td>
+          <td>
+            <form method="post" action="{% url 'modifier_achat' achat.CodeAchat %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Modifier</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h1>aucune achat n'est effectué</h1>
+    <a href="{% url 'liste_achats' %}"><button>Retoure à la liste</button></a>
+    <a href="{% url 'achat'%}"><button>Ajouter un achat</button></a>
+    {% endif%}
+    <a href="{% url 'home' %}"><button>Retourner à l'accueil</button></a>
+  </body>
+</html>
