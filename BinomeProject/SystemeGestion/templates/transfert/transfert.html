@@ -1,3 +1,6 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,5 +15,8 @@
         {{ form.as_p }}
         <button type="submit">Effectuer le Transfert</button>
     </form>
+    <h1>{{message}}</h1>
+    <a href="{% url 'fiche_transfert'%}"><button>Retoure a l fiche de transfert</button></a>
 </body>
 </html>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% if vendus %}
+    <h2>Journal des ventes</h2>
+    <table border="1px">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>produit</th>
+          <th>Quantite</th>
+          <th>prix_unitaire</th>
+          <th>Montant </th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for vendre in vendus %}
+        <tr>
+          <td>{{vendre.client}}</td>
+          <td>{{vendre.product}}</td>
+          <td>{{vendre.qte}}</td>
+          <td>{{vendre.price}}</td>
+          <td>{{vendre.montant_vente}}</td>
+          
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <h1>pas de ventes</h1>
+    {% endif%}
+    </ul>
+  </body>
+</html>
+{% endblock %}

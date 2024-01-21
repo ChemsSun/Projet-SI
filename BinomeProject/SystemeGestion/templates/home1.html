@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/sty.css' %}" />
+  </head>
+  <body>
+    <div id="header">
+      <!-- Logo -->
+      <div id="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" />
+      </div>
+
+      <!-- Informations de l'utilisateur -->
+      <div id="user-info">
+        <span>user </span>
+        <img src="{% static 'images/img1.png' %}" alt="" />
+        <!-- Ajoutez d'autres informations de l'utilisateur au besoin -->
+      </div>
+    </div>
+    <div id="sidebar">
+      <!-- Barre de navigation verticale -->
+      <nav>
+        <ul>
+          <li>
+            <a href="{% url 'home'%}"
+              ><img
+                id="icon"
+                src="{% static 'images/home.png' %}"
+                alt=""
+              /><span>Accueil</span></a
+            >
+          </li>
+          <li>
+            <a href="{% url 'home'%}"
+              ><img
+                id="icon"
+                src="{% static 'images/desh.png' %}"
+                alt=""
+              /><span>DashBoard</span></a
+            >
+          </li>
+          <li>
+            <a href="{% url 'liste_centres'%}"
+              ><img
+                id="icon"
+                src="{% static 'images/storefront.png' %}"
+                alt=""
+              /><span>Activites des centres</span></a
+            >
+            {% for centre in centres %}
+            <li>
+                <a href="{% url 'details_centre' centre.Code %}" class="btn btn-primary">{{ centre.designation }}</a>
+            </li>
+        {% endfor %}
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+  </body>
+</html>

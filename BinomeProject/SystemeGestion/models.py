@@ -17,6 +17,7 @@ class MatierePremiere(models.Model):
     Description=models.CharField(max_length=100)
     Qte=models.IntegerField(default=0)
     prix=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    prix_vente=models.DecimalField(max_digits=10, decimal_places=2,default=0)
     def __str__(self):
         return self.NomP
 
@@ -43,7 +44,8 @@ class Client(models.Model):
     Nom=models.CharField(max_length=30)
     Prenom=models.CharField(max_length=30)
     Adress=models.CharField(max_length=50)
-
+    def __str__(self):
+        return str(self.Nom)
 
 class Reglement_Fournisseur(models.Model):
     ID=models.AutoField(primary_key=True)
@@ -65,7 +67,6 @@ class Transfert(models.Model):
     quantite = models.IntegerField()
     cout_transfert=models.DecimalField(max_digits=10,decimal_places=2)
     total=models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    
 
 class Employe(models.Model):
     CodeE=models.AutoField(primary_key=True)
@@ -83,7 +84,33 @@ class Employe(models.Model):
 class Paiement_Emloyes(models.Model):
     CodePay=models.AutoField(primary_key=True)
     employe=models.ForeignKey(Employe,on_delete=models.CASCADE)
+    date_paiement=models.DateField()
     presence=models.BooleanField()
     salaire_journalier=models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    salaire_retenu=models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    masrouf=models.DecimalField(max_digits=10,decimal_places=2,default=0)
+    salaire_retenu=models.DecimalField(max_digits=10,decimal_places=2,default=0,null=True, blank=True)
+    masrouf=models.DecimalField(max_digits=10,decimal_places=2,default=0,null=True, blank=True)
+   
+    def __str__(self):
+        return str(self.CodePay)
+
+
+class CreditClient(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    montant_vente = models.FloatField()
+    montant_paye = models.FloatField()
+    montant_restant = models.FloatField()        
+
+
+
+class Vente(models.Model):
+    Client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    mtrP = models.ForeignKey(MatierePremiere,on_delete=models.CASCADE)
+    qte = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    montant_vente = models.FloatField(editable=False) # ce champ ne sera pas modifiable par l'utilisateur
+    credit_client = models.ForeignKey(CreditClient, on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return self.mtrP.NomP
+    def save(self, *args, **kwargs):
+        self.montant_vente= self.qte * self.price
+        super().save(*args, **kwargs)

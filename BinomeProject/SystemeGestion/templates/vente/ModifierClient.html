@@ -1,18 +1,19 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Modifier Client</title>
   </head>
   <body>
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
-
-    <form method="post">
+    <h2>Modifier Client</h2>
+    <form method="post" action="">
       {% csrf_token %} {{ form.as_p }}
-      <button type="submit">Créer Centre</button>
+      <button type="submit">Modifier Client</button>
     </form>
   </body>
 </html>
+{% endblock %}

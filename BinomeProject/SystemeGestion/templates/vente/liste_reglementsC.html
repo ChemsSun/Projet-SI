@@ -1,0 +1,33 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
+<!-- templates/liste_reglements.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AgriStock</title>
+  </head>
+  <body>
+    <h2>Liste des Règlements</h2>
+    <table border="1px">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Montant Payé</th>
+          <th>montant_vente</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% csrf_token %} {% for reglement in reglements %}
+        <tr>
+          <td>{{ reglement.client }}</td>
+          <td>{{ reglement.montant_paye }}</td>
+          <td>{{ reglement.montant_vente }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+  </html>
+  
+  {% endblock %}

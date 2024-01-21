@@ -1,5 +1,7 @@
+{% extends 'home1.html'%}
 {% load static %}
 <!DOCTYPE html>
+{% block content %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,18 +9,34 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'css/style.css' %}"
+      href="{% static 'css/home.css' %}"
     />
     <title>Document</title>
   </head>
   <body>
-    <div class="h">
-      <h1>hellloooo</h1>
-      <a href="{% url 'liste_achats' %}"><button>Vos achats</button></a>
-        <a href="{% url 'liste_fournisseurs' %}"><button>fournisseur disponible</button></a>
-        <a href="{% url 'liste_centres' %}"><button>Liste de vos centres</button></a>
-      <a href="{% url 'fiche_transferts' %}"><button>Vos transfert</button></a>
-      <a href="{% url 'list_matierepremiere' %}"><button>stock</button></a>
+    <div class="button-container">
+      <h1>Bienvenue à AgriStock</h1>
+      <a href="{% url 'liste_achats' %}" class="button">
+        <img src="{% static 'images/Achat2.jpg' %}" alt="" class="button-image" />
+        <span class="button-text">Achat</span>
+      </a>
+      <a href="{% url 'list_matierepremiere' %}" class="button">
+        <img src="{% static 'images/Stock1.png' %}" alt="" class="button-image" />
+        <span class="button-text">STOCK</span></a
+      >
+      <a href="{% url 'journal_vente' %}" class="button">
+        <img src="{% static 'images/vente.png' %}" alt="" class="button-image" />
+        <span class="button-text">Vente</span></a
+      >
+      <a href="{% url 'fiche_transfert' %}" class="button">
+        <img
+          src="{% static 'images/transfert.png' %}"
+          alt=""
+          class="button-image"
+        />
+        <span class="button-text">Transfert</span></a
+      >
     </div>
   </body>
-</html>
+  </html>
+  {% endblock content%}

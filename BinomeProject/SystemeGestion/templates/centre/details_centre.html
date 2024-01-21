@@ -1,3 +1,6 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +10,10 @@
 </head>
 <body>
     <h1>hello {{ centre.designation }}</h1>
-    <a href="{% url 'list_employes' centre_id=centre.Code %}">liste employe</a>
-    <a href="{% url 'fichier_transfert_centres' centre_id=centre.Code %}">liste des transfert</a>
+
+        <a href="{% url 'list_employes' centre_id=centre.Code %}"><button type="button">liste employe</button></a>
+        <a href="{% url 'fiche_transfert_centres' centre_id=centre.Code %}"><button>liste des transfert</button></a>
+        <a href="#"><button>Liste ventes</button></a>
 </body>
 </html> 
+{% endblock %}

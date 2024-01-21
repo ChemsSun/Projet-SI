@@ -68,3 +68,13 @@ tr:nth-child(even) {
 
 
  */
+.formulaire_achat{
+    width: 397px;
+    height: 711px;
+    flex-shrink: 0;
+    fill: #FFF;
+}
+
+h2{
+    color:red;
+}

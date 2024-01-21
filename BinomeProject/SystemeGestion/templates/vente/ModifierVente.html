@@ -1,0 +1,20 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modifier Vente</title>
+  </head>
+  <body>
+    <h2>Modifier Vente</h2>
+    <form method="post" action="">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Modifier Vente</button>
+    </form>
+  </body>
+  </html>
+  
+  {% endblock %}

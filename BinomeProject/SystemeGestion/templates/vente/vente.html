@@ -1,0 +1,54 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vente</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  </head>
+  <body>
+    <h2>Vente</h2>
+    <a href="{% url 'Ajout' %}">
+      <!-- Lien vers la page Ajout Client -->
+      <button type="button">Nouveau Client</button>
+    </a>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <label for="id_montant_vente_calculé">Montant Vente Calculé:</label>
+      <input
+      type="text"
+      id="id_montant_vente_calculé"
+      name="montant_vente_calculé"
+      readonly
+      />
+      <script>
+        $(document).ready(function () {
+          function calculerMontantVente() {
+            var qte = parseFloat($("#id_qte").val());
+            var price = parseFloat($("#id_price").val());
+
+            if (!isNaN(qte) && !isNaN(price)) {
+              var montant_vente = qte * price;
+              $("#id_montant_vente_calculé").val(montant_vente.toFixed(2));
+            }
+          }
+          
+          // Appeler la fonction lors du chargement de la page
+          calculerMontantVente();
+          
+          // Appeler la fonction à chaque changement de quantité ou de prix
+          $("#id_qte, #id_price").change(function () {
+            calculerMontantVente();
+          });
+        });
+        </script>
+
+<button type="submit">Enregistrer</button>
+</form>
+</body>
+</html>
+
+{% endblock %}

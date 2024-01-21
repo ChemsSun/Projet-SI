@@ -1,3 +1,6 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -54,7 +57,7 @@
     <h1>Aucun fournisseur</h1>
     <a href="{% url 'fournisseur'%}"><button>Ajouter nouveau fournisseur</button></a>
     {% endif%}
-    <a href="{% url 'home'%}"><button>Retourner à l'accueil</button></a>
 </body>
 
 </html>
+{% endblock %}

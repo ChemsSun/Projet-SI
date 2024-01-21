@@ -1,15 +1,19 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <title>Document</title>
 </head>
 <body>
     {% if employes %}
     <h1>voici les employes du {{ employes.0.centre.designation }}</h1>
-    <a href="{% url 'employes' centre_id=centre_id %}">Ajouter un employé</a>
-    <table border="1px">
+    <a href="{% url 'employes' centre_id=centre_id %}"><button>Ajouter un employé</button></a>
+    <table class="table table-success table-striped">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -30,7 +34,7 @@
                 <td>
                     <form method="post" action="{% url 'paiment_journalier' employe_id=employe.CodeE %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Ajouter info</button>
+                        <button type="submit" class="btn btn-success">Ajouter info</button>
                     </form>
                 </td>
                 <td>
@@ -48,4 +52,6 @@
     <a href="{% url 'employes' centre_id=centre_id %}">Ajouter un employé</a>
     {% endif%}
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </html>
+{% endblock %}

@@ -1,16 +1,65 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <title>Document</title>
-</head>
-<body>
-    <body>
-        <h1>Créer un paiement</h1>
-        <form method="post">
-      {% csrf_token %} {{ form.as_p }}
+  </head>
+  <body>
+    <h1>Créer un paiement</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div>
+        <label for="{{ form.presence.id_for_label }}">{{ form.presence.label }}</label>
+        {{ form.presence }}
+      </div>
+      <div>
+        <label for="{{ form.date_paiement.id_for_label }}">{{ form.date_paiement.label }}</label>
+        {{ form.date_paiement }}
+      </div>
+      <div>
+        <label for="{{ form.salaire_journalier.id_for_label }}">{{ form.salaire_journalier.label }}</label>
+        {{ form.salaire_journalier }}
+      </div>
+      <div >
+        <label for="{{ form.salaire_retenu.id_for_label }}">{{ form.salaire_retenu.label }}</label>
+        {{ form.salaire_retenu }}
+      </div>
+      <div>
+        <label for="{{ form.masrouf.id_for_label }}">{{ form.masrouf.label }}</label>
+        {{ form.masrouf }}
+  
+      </div>
       <button type="submit">OK</button>
-    </form> 
-</body>
+    </form>
+    <h2>Liste des paiements de {{ employe.NomE }}</h2>
+    <table class="table table-success table-striped">
+      <thead>
+        <tr>
+          <th>Présence</th>
+          <th>Date Paiement</th>
+          <th>Salaire journalier</th>
+          <th>Salaire retenu</th>
+          <th>Masrouf</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for paiement in paiements %}
+        <tr>
+          <td>{{ paiement.presence }}</td>
+          <td>{{ paiement.date_paiement}}</td>
+          <td>{{ paiement.salaire_journalier }}</td>
+          <td>{{ paiement.salaire_retenu }}</td>
+          <td>{{ paiement.masrouf }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
+{% endblock %}

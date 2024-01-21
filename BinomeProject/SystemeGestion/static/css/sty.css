@@ -1,0 +1,64 @@
+/* static/css/styles.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5fbf3;
+}
+#header {
+  background-color: #ffffff; /* Couleur de fond de la barre horizontale */
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+}
+
+#logo img {
+  max-height: 130px;
+  max-width: 95%; /* Ajustez la hauteur du logo selon vos besoins */
+  margin-bottom: 5px;
+}
+#icon {
+  max-width: 20%;
+  height: 30px;
+  vertical-align: middle; /* Aligner l'image au milieu de la ligne */
+  margin-right: 10px;
+}
+#user-info {
+  display: flex;
+  align-items: center;
+}
+#user-info img {
+  border-radius: 50%; /* Pour rendre la photo de profil ronde */
+  margin-right: 10px;
+}
+#sidebar {
+  background-color: #ffffff;
+  padding: 20px;
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 25;
+  left: 0;
+}
+span {
+  vertical-align: middle;
+}
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #175220;
+  padding: 10px;
+  display: block;
+}
+
+#content {
+  margin-top: 5px;
+  margin-left: 220px; /* ajustez selon la largeur de votre barre latérale */
+  padding: 10px;
+}
