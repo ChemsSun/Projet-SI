@@ -312,7 +312,7 @@ def paiment_journalier(request, employe_id):
         if form.is_valid():
             cpt = paiements.count()
 
-            if cpt < 10:
+            if cpt < 31:
 
                 # Ajouter un nouveau paiement
                 Paiement_Emloyes.objects.create(
@@ -330,7 +330,7 @@ def paiment_journalier(request, employe_id):
                 employe.Salaire += TotalJournilier - TotalRetenue - TotalMasrouf
                 employe.save()
 
-                if cpt + 1 == 10:
+                if cpt + 1 ==31 :
                     message = "Fin du mois"
             else:
                 message = "Vous avez atteint le nombre maximum de paiements pour ce mois."
