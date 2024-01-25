@@ -1,4 +1,5 @@
 from datetime import date
+import datetime
 from decimal import Decimal
 from django.shortcuts import get_object_or_404, render ,redirect
 from django.shortcuts import render
@@ -10,7 +11,7 @@ def home(request):
     return render(request,'home.html')
 
 #****************Gestion des achats***********************#
-def achat(request):  #cette fonction permet de recupperer les infomration entrer par l'utilisateur à travert le formulaire
+def achat(request): 
     if request.method == 'POST':
         #tester si le formulaire est POST
         form = AchatForm(request.POST)  
@@ -62,6 +63,7 @@ def delete_achat(request,achat_id):
     if request.method=='POST':
         #.delte() permet de supprimet l'achat correspondant
         achat.delete()
+        achat.matierePremiere.Qte -= achat.quantite
         return redirect('liste_achats')
     return render(request,'achat/delete_achat.html',{'achat':achat})
 
@@ -89,7 +91,9 @@ def fournisseur(request):   #meme traitement comme achat
 def liste_fournisseurs(request):
     #.order_by permet de trier la liste par le nom du fournisseur
     fournisseurs = Fournisseur.objects.all().order_by('NomF') 
-    return render(request, 'fournisseur/liste_fournisseurs.html', {'fournisseurs': fournisseurs})
+    myfilter=FournisseurFilter(request.GET, queryset=fournisseurs)
+    fournisseurs = myfilter.qs
+    return render(request, 'fournisseur/liste_fournisseurs.html', {'fournisseurs': fournisseurs,'myfilter':myfilter})
 
 def delete_fournisseur(request,fournisseur_id):
     fournisseur=get_object_or_404(Fournisseur,pk=fournisseur_id)
@@ -172,7 +176,9 @@ def list_matierepremiere(request):
     produits=MatierePremiere.objects.all().order_by('NomP')
     #calcule le total des prix de tous les matiere premiere 
     somme_prix_total = sum(produit.prix for produit in produits)
-    return render(request,'matiere_premiere/liste_produits.html',{'produits':produits,'somme_prix_total':somme_prix_total})
+    somme_quantite=sum(produit.Qte for produit in produits)
+    somme_vente=sum(produit.prix_vente for produit in produits)
+    return render(request,'matiere_premiere/liste_produits.html',{'produits':produits,'somme_prix_total':somme_prix_total,'somme_quantite':somme_quantite,'somme_vente':somme_vente})
 
 def delete_matierepremiere(request, produit_id):
     produit = get_object_or_404(MatierePremiere, pk=produit_id)
@@ -195,29 +201,37 @@ def modifier_matierepremiere(request, produit_id):
 #****************Gestion de Transfert***********************#
 
 def creer_transfert(request):
+    message = ""  # Initialiser le message en dehors des branches conditionnelles
+
     if request.method == 'POST':
         form = TransfertForm(request.POST)
         if form.is_valid():
-             # Créer un transfert sans l'enregistrer encore
+            # Créer un transfert sans l'enregistrer encore
             transfert = form.save(commit=False)
-             # Calculer le coût du transfert
-            transfert.cout_transfert=transfert.matierePremiere.prix*transfert.quantite
+            # Calculer le coût du transfert
+            transfert.cout_transfert = transfert.matierePremiere.prix * transfert.quantite
             # Mettre à jour la quantité de la matière première
-            transfert.matierePremiere.Qte-=form.cleaned_data['quantite']
-            # Mettre à jour le total du transfert
-            transfert.total+=transfert.cout_transfert
-            transfert.save()
-            message="transfert effectuer"
-            return render(request, 'transfert/transfert.html', {'form': form,'message':message})
+            matiere_premiere = get_object_or_404(MatierePremiere, pk=transfert.matierePremiere.pk)
+            if matiere_premiere.Qte < form.cleaned_data['quantite']:
+                message = "Pas de quantité suffisante"
+            else:
+                matiere_premiere.Qte -= form.cleaned_data['quantite']
+                matiere_premiere.save()
+
+                # Mettre à jour le total du transfert
+                transfert.total += transfert.cout_transfert
+                transfert.save()
+                message = "Transfert effectué avec succès"
 
     else:
         form = TransfertForm()
-    return render(request, 'transfert/transfert.html', {'form': form})
+
+    return render(request, 'transfert/transfert.html', {'form': form, 'message': message})
 
 def fiche_transferts(request):
     transferts = Transfert.objects.all().order_by('matierePremiere__NomP')
      # Calcule le total de tous les transferts.
-    total_transferts = Transfert.objects.aggregate(Sum('total'))['total__sum']
+    total_transferts = Transfert.objects.aggregate(Sum('total'))['total__sum'] or 0
     # Crée un filtre pour la liste des transferts.
     myfilter=TransfertFilter(request.GET, queryset=transferts)
     transferts = myfilter.qs
@@ -226,7 +240,9 @@ def fiche_transferts(request):
 
 def fiche_transfert_centres(request,centre_id):
     transferts = Transfert.objects.filter(centre_id=centre_id)
-    return render(request, 'transfert/fiche_transfert_centres.html', {'transferts': transferts})
+    myfilter=TransfertFilter(request.GET, queryset=transferts)
+    transferts = myfilter.qs
+    return render(request, 'transfert/fiche_transfert_centres.html', {'transferts': transferts,'myfilter':myfilter})
 #****************Gestion de Centre***********************#
 def liste_centres(request):
     if Centre.objects.count() == 0:
@@ -269,47 +285,61 @@ def delete_emloyes(request,employe_id):
     employe=get_object_or_404(Employe,pk=employe_id)
     if request.method=='POST':
        employe.delete()
-       return redirect('list_employes')
-    return render(request,'centre/delete_employe.html',{'employe':employe})
+    return redirect("list_employes", centre_id=employe.centre_id)
+
+def modifier_employe(request,employe_id):
+    modifier = Employe.objects.get(pk=employe_id)
+    if request.method == 'POST':
+        form = EmployeForm(request.POST, instance=modifier)
+        if form.is_valid():
+            form.save()
+            return redirect("list_employes", centre_id=modifier.centre_id)
+    else:
+        form = EmployeForm(instance=modifier)
+
+    return render(request, 'centre/ModifEmploye.html', {"form": form})
 #****************Paiment Emloyes***********************#
 def paiment_journalier(request, employe_id):
     employe = Employe.objects.get(pk=employe_id)
-        # Récupère tous les paiements journaliers de l'employé.
     paiements = Paiement_Emloyes.objects.filter(employe=employe)
-    # Calcule le salaire journalier total de l'employé.
-    total_salaire_journalier = paiements.aggregate(Sum('salaire_journalier'))['salaire_journalier__sum']
-     # Si le salaire journalier total est None, le définir à 0.
-    if total_salaire_journalier is None:
-        total_salaire_journalier = 0
+    TotalJournilier = 0
+    TotalMasrouf = 0
+    TotalRetenue = 0
+    message = ""
 
     if request.method == 'POST':
         form = PaimentEmpoye(request.POST)
         if form.is_valid():
-            paiment = form.save(commit=False)
-               # Assigner l'employé au paiement.
-            paiment.employe = employe
-            paiment.save()
-             # Mettre à jour le salaire de l'employé.
-            employe.Salaire += total_salaire_journalier
-            employe.save()
+            cpt = paiements.count()
+
+            if cpt < 10:
+
+                # Ajouter un nouveau paiement
+                Paiement_Emloyes.objects.create(
+                    employe=employe,
+                    date_paiement=form.cleaned_data['date_paiement'],
+                    presence=form.cleaned_data['presence'],
+                    salaire_journalier=form.cleaned_data['salaire_journalier'],
+                    salaire_retenu=form.cleaned_data['salaire_retenu'],
+                    masrouf=form.cleaned_data['masrouf']
+                )
+
+                TotalJournilier += form.cleaned_data['salaire_journalier']
+                TotalRetenue += form.cleaned_data['salaire_retenu']
+                TotalMasrouf += form.cleaned_data['masrouf']
+                employe.Salaire += TotalJournilier - TotalRetenue - TotalMasrouf
+                employe.save()
+
+                if cpt + 1 == 10:
+                    message = "Fin du mois"
+            else:
+                message = "Vous avez atteint le nombre maximum de paiements pour ce mois."
+
     else:
         form = PaimentEmpoye()
 
-    return render(request, 'centre/paiement_emp.html', {'employe': employe, 'form': form, 'paiements': paiements})
+    return render(request, 'centre/paiement_emp.html', {'employe': employe, 'form': form, 'paiements': paiements, 'message': message})
 
-# def calculer_salaire_mensuel(request):
-    # Obtenez la date du mois précédent
-    # date_mois_precedent = date.today() - relativedelta(months=1)
-
-    # # Calculez le salaire mensuel pour chaque employé
-    # employes = Employe.objects.all()
-    # for employe in employes:
-  
-    #     salaire_mensuel = employe.Salaire * date_mois_precedent.month
-
-    #     Employe.objects.filter(CodeE=employe.CodeE).update(salaire_mensuel=salaire_mensuel)
-
-    # return render(request, 'centre/calcul_salaire_mensuel.html', {'date_mois_precedent': date_mois_precedent, 'employes': employes})
 # *************Gestion des Ventes***********************************#
 def vendre(request):
     if request.method == 'POST':
@@ -334,7 +364,7 @@ def vendre(request):
             matiere_premiere.prix_vente = vente.price
             matiere_premiere.save()
 
-            return redirect('reglement', vente.id)  # Rediriger vers la page de règlement avec l'ID de la vente
+            return redirect('reglement', vente.codevente)  # Rediriger vers la page de règlement avec l'ID de la vente
     else:
         form = VenteForm()
 
@@ -343,10 +373,12 @@ def vendre(request):
 
 def journal_vente(request):
     vendus = Vente.objects.all()
-    return render(request, 'vente/journal_vente.html', {'vendus': vendus})
+    myfilter=VenteFilter(request.GET, queryset=vendus)
+    vendus = myfilter.qs
+    return render(request, 'vente/journal_vente.html', {'vendus': vendus,'myfilter':myfilter})
 
 def reglement(request, vente_id):
-    vente = Vente.objects.get(id=vente_id)
+    vente = Vente.objects.get(pk=vente_id)
     credit_client = vente.credit_client
 
     if request.method == 'POST':
@@ -375,23 +407,29 @@ def modifier_vente(request,vente_id):
         form = ModifierVenteForm(request.POST, instance=modifier)
         if form.is_valid():
             form.save()
-            return redirect("jouranl_vente")
+            return redirect("journal_vente")
     else:
-        form = ClientForm(instance=modifier)
+        form = ModifierVenteForm(instance=modifier)
     return render(request, 'vente/ModifierVente.html', {"form": form})
 
+def delete_vente(request,vente_id):
+    vente=get_object_or_404(Vente,pk=vente_id)
+    if request.method=='POST':
+        vente.delete()
+        return redirect('journal_vente')
+    return render(request,'vente/SupprimerVente.html',{'vente':vente})
+# *************Gestion des Clients***********************************#
 def modifier_client(request,client_id):
     modifier = Client.objects.get(pk=client_id)
     if request.method == 'POST':
         form = ClientForm(request.POST, instance=modifier)
         if form.is_valid():
             form.save()
-            return redirect("listeclientes")
+            return redirect('listeclient')
     else:
         form = ClientForm(instance=modifier)
 
     return render(request, 'vente/ModifierClient.html', {"form": form})
-# *************Gestion des Clients***********************************#
 
 def client(request):
     if request.method =='POST':    
@@ -403,8 +441,8 @@ def client(request):
          form = ClientForm()
     return render(request, 'vente/AjoutClient.html', {'form': form})
 
-def supp_client(request,Code_Client):
-    client=get_object_or_404(Client,pk=Code_Client)
+def supp_client(request,client_id):
+    client=get_object_or_404(Client,pk=client_id)
     if request.method=='POST':
         client.delete()
         return redirect('listeclient')
@@ -413,3 +451,104 @@ def supp_client(request,Code_Client):
 def listeclient(request):
     clients = Client.objects.all()
     return render(request, 'vente/listeclient.html', {'clients': clients})
+
+#***************Produits centres************************************#
+def production(request,centre_id):
+    if request.method=='POST':
+        form=ProductForm(request.POST)
+        if form.is_valid():
+            Product=form.save(commit=False)
+            # Assigner le produit au centre donné
+            Product.centre_id = centre_id
+            Product.save()
+            return redirect('listeP', centre_id=centre_id)
+    else:   
+        form=ProductForm()
+    return render(request,'Production/AjoutP.html',{'form':form})
+
+def list_P(request,centre_id):
+    products=Product.objects.filter(centre_id=centre_id)
+    return render(request,'Production/listeP.html',{'products':products,'centre_id': centre_id})
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        product.delete()
+    return redirect('listeP',centre_id=product.centre_id)  # Redirige vers la liste après suppression
+    
+def modifier_product(request, product_id):
+    modifier = Product.objects.get(pk=product_id)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=modifier)
+        if form.is_valid():
+            form.save()
+            return redirect('listeP',centre_id=modifier.centre_id)
+    else:
+        form = ModifierProductForm(instance=modifier)
+
+    return render(request, 'Production/ModifP.html', {"form": form})
+
+# *************Gestion des Ventes centres ***********************************#
+def ventec(request,centre_id):
+    if request.method=='POST':
+        form=VenteCForm(request.POST)
+        if form.is_valid():
+            vendu=form.save(commit=False)
+            # Assigner le produit au centre donné
+            vendu.centre_id = centre_id
+            vendu.save()
+            return redirect('listeV', centre_id=centre_id)
+    else:   
+        form=VenteCForm()
+    return render(request,'centre/AjoutV.html',{'form':form})
+
+def list_V(request,centre_id):
+    ventes=VenteC.objects.filter(centre_id=centre_id)
+    myfilter=VenteCFilter(request.GET, queryset=ventes)
+    ventes = myfilter.qs
+    return render(request,'centre/journal_vntC1.html',{'ventes':ventes,'centre_id': centre_id,'myfilter':myfilter})
+
+def delete_V(request, VenteC_id):
+    venteC= get_object_or_404(VenteC, pk=VenteC_id)
+    if request.method == 'POST':
+        venteC.delete()
+    return redirect('listeV',centre_id=venteC.centre_id)  # Redirige vers la liste après suppression
+    
+def modifier_V(request, VenteC_id):
+    modifier = VenteC.objects.get(pk=VenteC_id)
+    if request.method == 'POST':
+        form = VenteCForm(request.POST, instance=modifier)
+        if form.is_valid():
+            form.save()
+            return redirect('listeV',centre_id=modifier.centre_id)
+    else:
+        form = ModifierVenteC(instance=modifier)
+    return render(request, 'centre/ModifV.html', {"form": form})
+
+
+
+def dashboard(request):
+    tops_clients = Client.objects.all().order_by('-vente__montant_vente')[:5]
+
+    # Utilisez le champ correct pour ordonner les fournisseurs par montant d'achat
+    tops_fournisseurs = Fournisseur.objects.all().order_by('-achat__montant_total_achat_ht')[:5]
+
+    total_achats = Achat.objects.aggregate(total=models.Sum('montant_total_achat_ht'))['total'] or 0
+    total_ventes = Vente.objects.aggregate(total=models.Sum('montant_vente'))['total'] or 0
+
+    # Convertissez les résultats en float avant de faire la division
+    total_achats = float(total_achats)
+    total_ventes = float(total_ventes)
+
+    taux_achats = (total_achats / total_ventes)  if total_ventes != 0 else 0
+    taux_ventes = (total_ventes / total_achats)  if total_achats != 0 else 0
+
+    context = {
+        'tops_clients': tops_clients,
+        'tops_fournisseurs': tops_fournisseurs,
+        'taux_achats': taux_achats,
+        'taux_ventes': taux_ventes,
+    }
+
+    return render(request, 'dashboard.html', context)
+

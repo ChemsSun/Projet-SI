@@ -12,7 +12,7 @@
 <body>
     {% if employes %}
     <h1>voici les employes du {{ employes.0.centre.designation }}</h1>
-    <a href="{% url 'employes' centre_id=centre_id %}"><button>Ajouter un employé</button></a>
+    <a href="{% url 'employes' centre_id=centre_id %}"><button class="btn btn-secondary">Ajouter un employé</button></a>
     <table class="table table-success table-striped">
         <thead>
             <tr>
@@ -38,6 +38,12 @@
                     </form>
                 </td>
                 <td>
+                    <form method="post" action="{% url 'modifier_employe' employe.CodeE %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Modifer</button>
+                    </form>
+                </td>
+                <td>
                     <form method="post" action="{% url 'delete_emloyes' employe_id=employe.CodeE %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -49,7 +55,7 @@
     </table>
     {% else %}
     <h1>Aucun employe inseret</h1>
-    <a href="{% url 'employes' centre_id=centre_id %}">Ajouter un employé</a>
+    <a href="{% url 'employes' centre_id=centre_id %}"><button class="btn btn-secondary">Ajouter un employé</button></a>
     {% endif%}
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

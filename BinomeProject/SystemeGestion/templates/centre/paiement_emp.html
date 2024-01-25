@@ -34,7 +34,7 @@
         {{ form.masrouf }}
   
       </div>
-      <button type="submit">OK</button>
+      <button type="submit" class="btn btn-outline-secondary">Enrengistré</button>
     </form>
     <h2>Liste des paiements de {{ employe.NomE }}</h2>
     <table class="table table-success table-striped">
@@ -59,6 +59,9 @@
         {% endfor %}
       </tbody>
     </table>
+    <h1>{{message}}</h1>
+    <a href="{% url 'list_employes' centre_id=employe.centre_id %}"><button class="btn btn-outline-secondary">Retour à la liste des employés</button></a>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

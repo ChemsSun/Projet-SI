@@ -10,8 +10,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>liste des produits dans le magasin</h1>
-    <a href="{% url 'matierepremiere' %}"><button>Ajouter produit</button></a>
+    <h1>Le stock du magasin</h1>
+    <a href="{% url 'matierepremiere' %}"><button class="btn btn-outline-secondary">Ajouter Matiere Premiere</button></a>
     <table class="table table-success table-striped">
         <thead>
           <tr>
@@ -45,9 +45,17 @@
           </tr>
           {% endfor %}
           <tr>
-            <td colspan="3">Somme totale :</td>
+            <td colspan="5">Somme totale d'achat :</td>
             <td>{{ somme_prix_total }}</td>
           </tr>
+          <tr>
+            <td colspan="5">Somme totale de quantite:</td>
+            <td>{{ somme_quantite }}</td>
+        </tr>
+        <tr>
+          <td colspan="5">Somme totale de vente:</td>
+          <td>{{ somme_vente }}</td>
+      </tr>
         </tbody>
       </table>
 </body>

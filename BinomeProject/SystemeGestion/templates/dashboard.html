@@ -1,0 +1,68 @@
+{% extends 'home1.html'%}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="button-container">
+
+        <h2>Top Clients</h2>
+        <ul>
+            {% for client in tops_clients %}
+            <li>{{ client.name }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Top Fournisseurs</h2>
+        <ul>
+            {% for fournisseur in tops_fournisseurs %}
+            <li>{{ fournisseur.name }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Taux d'Achats: {{ taux_achats }}%</h2>
+        <h2>Taux de Ventes: {{ taux_ventes }}%</h2>
+        
+        <canvas id="myChart" width="200" height="200"></canvas>
+        
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Top Clients', 'Top Fournisseurs'],
+                datasets: [{
+                    label: 'Pourcentage',
+                    data: [{{ taux_achats }}, {{ taux_ventes }}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+        </script>
+</div>
+</body>
+</html>
+{% endblock %}

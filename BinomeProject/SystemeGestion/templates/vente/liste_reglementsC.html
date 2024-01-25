@@ -1,6 +1,4 @@
-{% extends 'home1.html'%}
-{% load static %}
-{% block content %}
+{% extends 'home1.html'%} {% load static %} {% block content %}
 <!-- templates/liste_reglements.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +13,7 @@
           <th>Client</th>
           <th>Montant Payé</th>
           <th>montant_vente</th>
+          <th>montant_restant</th>
         </tr>
       </thead>
       <tbody>
@@ -23,11 +22,12 @@
           <td>{{ reglement.client }}</td>
           <td>{{ reglement.montant_paye }}</td>
           <td>{{ reglement.montant_vente }}</td>
+          <td>{{ reglement.montant_restant }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </body>
-  </html>
-  
-  {% endblock %}
+</html>
+
+{% endblock %}

@@ -35,15 +35,32 @@ urlpatterns=[
     path('centres/<int:centre_id>/employes/', views.employes, name='employes'),
     path('centres/<int:centre_id>/list_employes/', views.list_employes, name='list_employes'),
     path('list_employes/<int:employe_id>/paiment_journalier/', views.paiment_journalier, name='paiment_journalier'),
-    path('delete_emloyes/<int:employe_id>/', views.delete_emloyes, name='delete_emloyes'),
-    path('calcul_salaire_mensuel/', views.calculer_salaire_mensuel, name='calcul_salaire_mensuel'),
+    path('list_employes/<int:employe_id>/delete_emloyes/', views.delete_emloyes, name='delete_emloyes'),
+    path('modifier_employe/<int:employe_id>/', views.modifier_employe, name='modifier_employe'),
+
+    # path('calcul_salaire_mensuel/', views.calculer_salaire_mensuel, name='calcul_salaire_mensuel'),
 
     path('vente/',views.vendre,name='vente'),
     path('journalvente/',views.journal_vente,name='journal_vente'),
+    path('Modivente/<int:vente_id>/',views.modifier_vente,name='modifier_vente'),
+    path('suppvente/<int:vente_id>/',views.delete_vente,name='supprimer_vente'),
     
     path('Ajoutcl/',views.client,name='Ajout'),
     path('listecl/',views.listeclient,name='listeclient'),
     path('reglement/<int:vente_id>/', views.reglement, name='reglement'),
     path('liste_reglements/', views.liste_reglements, name='liste_reglements'),
-  
+    path('ModiC/<int:client_id>/',views.modifier_client,name='modifier_client'),
+    path('suppC/<int:client_id>/',views.supp_client,name='supp_client'),
+
+    path('centres/<int:centre_id>/AjoutP/',views.production,name='AjoutP'),
+    path('modifP/<int:product_id>/',views.modifier_product,name='modifP'),
+    path('deleteP/<int:product_id>/',views.delete_product,name='deleteP'),
+    path('centres/<int:centre_id>/liste_P/', views.list_P, name='listeP'),
+
+    path('centres/<int:centre_id>/AjoutV/',views.ventec,name='AjoutV'),
+    path('centres/<int:centre_id>/listeV/', views.list_V, name='listeV'),
+    path('modifV/<int:VenteC_id>/',views.modifier_V,name='modifV'),
+    path('deleteV/<int:VenteC_id>/',views.delete_V,name='deleteV'),
+
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

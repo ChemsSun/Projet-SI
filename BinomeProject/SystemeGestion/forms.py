@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms 
 
 class FournisseurWidget(s2forms.ModelSelect2Widget):
+    model = Fournisseur  # Ajoutez cette ligne pour spécifier le modèle
     search_fields = [
         'NomF__icontains',
     ]
@@ -19,9 +20,6 @@ class AchatForm(forms.ModelForm):
             'quantite':_("Quantité :"),
             'prix_unitaire_ht':_("Prix Unitaire :"),
             'date_achat':_("Date achat :"),
-        }
-        widgets = {
-            "fournisseur": FournisseurWidget,
         }
 
 
@@ -48,7 +46,15 @@ class FournisseurForm(forms.ModelForm):
             'adresse':_("Adresse :"),
             'email':_("Email :"),
         }
-  
+
+class FournisseurFilter(django_filters.FilterSet):
+    class Meta:
+        model=Fournisseur
+        fields= ['NomF']
+        labels={
+            'NomF':_("Nom Fournisseur :"),
+        }
+
 class MatierePremiereForm(forms.ModelForm):
     class Meta:
         model=MatierePremiere
@@ -68,15 +74,44 @@ class AchatFilter(django_filters.FilterSet):
             'matierePremiere':_("Matière première :"),
             'date_achat':_("Date :"),
         }
+        widgets={
+            'fournisseur':FournisseurWidget
+        }
 
 class TransfertFilter(django_filters.FilterSet):
     class Meta:
-        models=Transfert
-        fields=['date_transfert','centre','matierePremiere']
+        model = Transfert
+        fields = ['date_transfert', 'centre', 'matierePremiere']
+        labels = {
+            'date_transfert': _("Date du transfert :"),
+            'centre': _("Centres :"),
+            'matierePremiere': _("Nom de Matiere :")
+        }
+
+class VenteFilter(django_filters.FilterSet):
+    class Meta:
+        model=Vente
+        fields=['Client','mtrP']
         labels={
-            'date_transfert':_("Date du transfert :"),
-            'centre':_("Centres :"),
-            'matierePremiere':_("Nom de Matiere :")
+            'Client':_("Client :"),
+            'mtrP':_("Matiere Premiere :")
+        }
+
+class VenteCFilter(django_filters.FilterSet):
+    class Meta:
+        model=VenteC
+        fields=['Client']
+        labels={
+            'Client':_("Client :"),
+        }
+
+class VenteCForm(forms.ModelForm):
+    class Meta:
+        model=VenteC
+        fields=['Client', 'prdt'] 
+        Labels={
+            'Client':_("Client :"),
+            'prdt':_("Produit :"),
         }
 
 class MontantForm(forms.ModelForm):
@@ -146,17 +181,82 @@ class ClientForm(forms.ModelForm):
     class Meta:
        model = Client
        fields = ['Nom','Prenom','Adress']   
+       labels={
+           'Nom':_("Nom :"),
+           'Prenom':_("Prenom :"),
+           'Adress':_("Adress :"),
+       }
    
 class VenteForm(forms.ModelForm):
     class Meta:
         model =Vente
         fields = ['Client', 'mtrP', 'qte', 'price']
+        labels={
+           'Client':_("Client :"),
+           'mtrP':_("Matiere Premiere :"),
+           'qte':_("Quantité :"),
+           'price':_("Prix :"),
+       }
 
 class ReglementForm(forms.Form):
     montant_paye = forms.FloatField(label='Montant Payé')
-
+    
 
 class ModifierVenteForm(forms.ModelForm):
     class Meta:
         model=Vente
         fields=['Client', 'mtrP', 'qte', 'price']
+        labels={
+           'Client':_("Client :"),
+           'mtrP':_("Matiere Premiere :"),
+           'qte':_("Quantité :"),
+           'price':_("Prix :"),
+       }
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model=Product
+        fields=['Nom', 'date_production','designation','Quantite','price_v']  
+        Labels={
+            'Nom':_("Nom :"),
+            'date_production':_("Date de production :"),
+            'designation':_("Designation :"),
+            'Quantite':_("Quantité :"),
+            'price_v':_("Prix de vente :"),  
+        }  
+
+
+class ModifierProductForm(forms.ModelForm):
+    class Meta:
+        model=Product
+        fields=[ 'Nom', 'date_production','designation','Quantite','price_v']
+        Labels={
+            'Nom':_("Nom :"),
+            'date_production':_("Date de production :"),
+            'designation':_("Designation :"),
+            'Quantite':_("Quantité :"),
+            'price_v':_("Prix de vente :"),  
+        } 
+
+class VenteCForm(forms.ModelForm):
+    class Meta:
+        model=VenteC
+        fields=['Client', 'prdt', 'qte', 'price']   
+        Labels={
+            'Client':_("Client :"),
+            'prdt':_("Produit :"),
+            'qte':_("Quantité :"),
+            'price':_("Prix :"),
+        } 
+
+class ModifierVenteC(forms.ModelForm):
+    class Meta:
+        model=VenteC
+        fields=['Client', 'prdt', 'qte', 'price']  
+        Labels={
+            'Client':_("Client :"),
+            'prdt':_("Produit :"),
+            'qte':_("Quantité :"),
+            'price':_("Prix :"),  
+        } 

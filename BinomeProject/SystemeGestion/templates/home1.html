@@ -4,8 +4,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Mon Site{% endblock %}</title>
+    <title>{% block title %}AgriStock{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/sty.css' %}" />
+    <link rel="icon" href="static/images/logo" type="image/png">
+    
   </head>
   <body>
     <div id="header">
@@ -35,7 +37,7 @@
             >
           </li>
           <li>
-            <a href="{% url 'home'%}"
+            <a href="{% url 'dashboard'%}"
               ><img
                 id="icon"
                 src="{% static 'images/desh.png' %}"

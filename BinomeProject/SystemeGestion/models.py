@@ -4,7 +4,7 @@ class Fournisseur(models.Model):
     ID_Fourni= models.AutoField(primary_key=True)
     NomF = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
-    email = models.EmailField()
+    email = models.EmailField() #remplacer par Num_Telephone
     solde = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     
     def __str__(self):
@@ -42,7 +42,7 @@ class Achat(models.Model):
 class Client(models.Model):
     Code_Client=models.AutoField(primary_key=True)
     Nom=models.CharField(max_length=30)
-    Prenom=models.CharField(max_length=30)
+    Prenom=models.CharField(max_length=30) #ajouter numtelphone
     Adress=models.CharField(max_length=50)
     def __str__(self):
         return str(self.Nom)
@@ -54,7 +54,7 @@ class Reglement_Fournisseur(models.Model):
     montant_versement=models.DecimalField(max_digits=10,decimal_places=2)
 
 class Centre(models.Model):
-    Code=models.AutoField(primary_key=True)
+    Code=models.AutoField(primary_key=True) #modifier to CodeCentre
     designation=models.CharField(max_length=100,choices=(('centre1', 'Centre 1'), ('centre2', 'Centre 2'), ('centre3', 'Centre 3')))
     def __str__(self):
         return self.designation
@@ -65,7 +65,7 @@ class Transfert(models.Model):
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
     matierePremiere = models.ForeignKey(MatierePremiere, on_delete=models.CASCADE)
     quantite = models.IntegerField()
-    cout_transfert=models.DecimalField(max_digits=10,decimal_places=2)
+    cout_transfert=models.DecimalField(max_digits=10,decimal_places=2,default=0)
     total=models.DecimalField(max_digits=10,decimal_places=2,default=0)
 
 class Employe(models.Model):
@@ -95,6 +95,7 @@ class Paiement_Emloyes(models.Model):
 
 
 class CreditClient(models.Model):
+    CodeCredit=models.AutoField(primary_key=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     montant_vente = models.FloatField()
     montant_paye = models.FloatField()
@@ -103,6 +104,7 @@ class CreditClient(models.Model):
 
 
 class Vente(models.Model):
+    codevente=models.AutoField(primary_key=True)
     Client = models.ForeignKey(Client, on_delete=models.CASCADE)
     mtrP = models.ForeignKey(MatierePremiere,on_delete=models.CASCADE)
     qte = models.PositiveIntegerField()
@@ -114,3 +116,31 @@ class Vente(models.Model):
     def save(self, *args, **kwargs):
         self.montant_vente= self.qte * self.price
         super().save(*args, **kwargs)
+
+
+class Product(models.Model):
+    CodP=models.AutoField(primary_key=True)
+    centre=models.ForeignKey(Centre,on_delete=models.CASCADE)
+    Nom=models.CharField(max_length=30)
+    designation=models.CharField(max_length=30)
+    date_production=models.DateField()
+    Quantite=models.IntegerField(default=0)
+    price_v=models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    def __str__(self):
+        return self.Nom
+    
+
+class VenteC(models.Model):
+    CodeVenteC=models.AutoField(primary_key=True)
+    centre=models.ForeignKey(Centre,on_delete=models.CASCADE)
+    Client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    prdt = models.ForeignKey(Product,on_delete=models.CASCADE)
+    qte = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    montant_vente = models.FloatField(editable=False) # ce champ ne sera pas modifiable par l'utilisateur
+    def __str__(self):
+        return self.prdt.Nom
+    def save(self, *args, **kwargs):
+        self.montant_vente= self.qte * self.price
+        super().save(*args, **kwargs)
+        

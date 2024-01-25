@@ -12,12 +12,16 @@
 <body>
     {% if transferts %}
     <h1>Les transferts effectuer sont</h1>
+    <form method="get" action="{% url 'fiche_transfert_centres' %}">
+        {{ myfilter.form.as_p }}
+        <button type="submit" class="btn btn-outline-secondary">Rechercher</button>
+     </form>
     <table class="table table-success table-striped">
         <thead>
             <tr>
                 <th>date</th>
                 <th>centre</th>
-                <th>produit</th>
+                <th>Matiere Premiere</th>
                 <th>Quentite</th>
             </tr>
         </thead>
